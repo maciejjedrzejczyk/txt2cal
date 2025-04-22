@@ -9,7 +9,7 @@ function Footer() {
       <div className="footer-content">
         <div className="footer-links">
           <a 
-            href="https://github.com/yourusername/txt2cal" 
+            href="https://github.com/maciejjedrzejczyk/txt2cal" 
             target="_blank" 
             rel="noopener noreferrer"
           >
@@ -17,7 +17,7 @@ function Footer() {
           </a>
           <span className="footer-separator">|</span>
           <a 
-            href="https://github.com/yourusername/txt2cal/issues" 
+            href="https://github.com/maciejjedrzejczyk/txt2cal/issues" 
             target="_blank" 
             rel="noopener noreferrer"
           >

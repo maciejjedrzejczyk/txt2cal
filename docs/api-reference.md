@@ -184,4 +184,4 @@ Future versions will be explicitly versioned in the URL path (e.g., `/api/v2/pro
 
 ## Support
 
-For API support or to report issues, please open an issue on the [GitHub repository](https://github.com/yourusername/txt2cal/issues).
+For API support or to report issues, please open an issue on the [GitHub repository](https://github.com/maciejjedrzejczyk/txt2cal/issues).

@@ -23,7 +23,7 @@ This guide provides instructions for deploying txt2cal using Docker and Docker C
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/txt2cal.git
+   git clone https://github.com/maciejjedrzejczyk/txt2cal.git
    cd txt2cal
    ```
 

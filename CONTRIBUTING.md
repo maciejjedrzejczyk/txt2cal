@@ -21,7 +21,7 @@ This project adheres to a Code of Conduct that all contributors are expected to 
 
 ### Reporting Bugs
 
-- Check if the bug has already been reported in the [Issues](https://github.com/yourusername/txt2cal/issues)
+- Check if the bug has already been reported in the [Issues](https://github.com/maciejjedrzejczyk/txt2cal/issues)
 - Use the bug report template when creating a new issue
 - Include detailed steps to reproduce the bug
 - Include screenshots if applicable
@@ -29,7 +29,7 @@ This project adheres to a Code of Conduct that all contributors are expected to 
 
 ### Suggesting Enhancements
 
-- Check if the enhancement has already been suggested in the [Issues](https://github.com/yourusername/txt2cal/issues)
+- Check if the enhancement has already been suggested in the [Issues](https://github.com/maciejjedrzejczyk/txt2cal/issues)
 - Use the feature request template when creating a new issue
 - Clearly describe the problem and solution
 - Explain why this enhancement would be useful

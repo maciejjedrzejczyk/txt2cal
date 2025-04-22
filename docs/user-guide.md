@@ -204,7 +204,7 @@ Address: 456 Gourmet Ave, San Francisco, CA 94105
 
 If you encounter issues not covered here:
 
-1. Check the [GitHub Issues](https://github.com/yourusername/txt2cal/issues) for similar problems
+1. Check the [GitHub Issues](https://github.com/maciejjedrzejczyk/txt2cal/issues) for similar problems
 2. Report a new issue with details about your problem
 3. Include the itinerary text (with personal information removed) and error messages
 

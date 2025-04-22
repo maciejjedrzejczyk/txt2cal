@@ -25,7 +25,7 @@ This guide provides information for developers who want to contribute to or modi
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/txt2cal.git
+   git clone https://github.com/maciejjedrzejczyk/txt2cal.git
    cd txt2cal
    ```
 
