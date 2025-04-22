@@ -40,7 +40,7 @@ txt2cal allows users to paste unstructured text from travel confirmations (fligh
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/txt2cal.git
+   git clone https://github.com/maciejjedrzejczyk/txt2cal.git
    cd txt2cal
    ```
 
@@ -73,7 +73,7 @@ txt2cal allows users to paste unstructured text from travel confirmations (fligh
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/txt2cal.git
+   git clone https://github.com/maciejjedrzejczyk/txt2cal.git
    cd txt2cal
    ```
 
