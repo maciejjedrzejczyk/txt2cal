@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  # Frontend service
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "3000:80"
+    environment:
+      - REACT_APP_OLLAMA_API_URL=http://ollama:11434/api
+      - REACT_APP_API_URL=http://localhost:3001/api
+    depends_on:
+      - backend
+      - ollama
+    networks:
+      - txt2cal-network
+    restart: unless-stopped
+
+  # Backend service
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - OLLAMA_API_URL=http://ollama:11434/api
+      - OLLAMA_MODEL=llama3.2
+      - CORS_ORIGINS=http://localhost:3000
+      - RATE_LIMIT=100
+    depends_on:
+      - ollama
+    networks:
+      - txt2cal-network
+    restart: unless-stopped
+    volumes:
+      - backend-logs:/app/logs
+
+  # Ollama service
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    networks:
+      - txt2cal-network
+    restart: unless-stopped
+    # Pull the model on startup
+    command: >
+      sh -c "ollama serve &
+             sleep 10 &&
+             ollama pull llama3.2 &&
+             wait"
+
+networks:
+  txt2cal-network:
+    driver: bridge
+
+volumes:
+  ollama-data:
+  backend-logs:
