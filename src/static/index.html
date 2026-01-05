@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar Event Converter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .drop-zone {
+            border: 3px dashed #ccc;
+            border-radius: 12px;
+            padding: 60px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #fafafa;
+        }
+
+        .drop-zone.drag-over {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .drop-zone-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .drop-zone-text {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .drop-zone-hint {
+            color: #999;
+            font-size: 14px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .text-input {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .convert-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .convert-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .convert-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .result {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .result.active {
+            display: block;
+        }
+
+        .result.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+        }
+
+        .result.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+
+        .result-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .result-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .result-message {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .download-btn:hover {
+            background: #218838;
+        }
+
+        .selected-file {
+            display: none;
+            margin-top: 15px;
+            padding: 10px;
+            background: #f0f4ff;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .selected-file.active {
+            display: block;
+        }
+
+        .selected-file-name {
+            font-weight: 600;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📅 Calendar Event Converter</h1>
+        <p class="subtitle">Transform documents and text into calendar events</p>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="file">Upload File</button>
+            <button class="tab" data-tab="text">Paste Text</button>
+        </div>
+
+        <!-- File Upload Tab -->
+        <div class="tab-content active" id="file-tab">
+            <div class="drop-zone" id="dropZone">
+                <div class="drop-zone-icon">📄</div>
+                <div class="drop-zone-text">Drag & drop your file here</div>
+                <div class="drop-zone-hint">or click to browse (PDF, DOCX, TXT)</div>
+            </div>
+            <input type="file" id="fileInput" class="file-input" accept=".pdf,.docx,.txt">
+            <div class="selected-file" id="selectedFile">
+                Selected: <span class="selected-file-name" id="selectedFileName"></span>
+            </div>
+            <button class="convert-btn" id="convertFileBtn" disabled>Convert to Calendar Event</button>
+        </div>
+
+        <!-- Text Input Tab -->
+        <div class="tab-content" id="text-tab">
+            <textarea 
+                class="text-input" 
+                id="textInput" 
+                placeholder="Paste your event information here...&#10;&#10;Example:&#10;Team meeting tomorrow at 2pm in Conference Room A. We'll discuss Q1 planning and budget allocation."
+            ></textarea>
+            <button class="convert-btn" id="convertTextBtn">Convert to Calendar Event</button>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <div class="loading-text">Converting your event...</div>
+        </div>
+
+        <!-- Result Display -->
+        <div class="result" id="result">
+            <div class="result-icon" id="resultIcon"></div>
+            <div class="result-title" id="resultTitle"></div>
+            <div class="result-message" id="resultMessage"></div>
+            <a href="#" class="download-btn" id="downloadBtn" style="display: none;">Download Calendar Event</a>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabName = tab.dataset.tab;
+                
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(tc => tc.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(`${tabName}-tab`).classList.add('active');
+                
+                hideResult();
+            });
+        });
+
+        // File upload handling
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const selectedFile = document.getElementById('selectedFile');
+        const selectedFileName = document.getElementById('selectedFileName');
+        const convertFileBtn = document.getElementById('convertFileBtn');
+        let currentFile = null;
+
+        dropZone.addEventListener('click', () => fileInput.click());
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('drag-over');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('drag-over');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFileSelect(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileSelect(e.target.files[0]);
+            }
+        });
+
+        function handleFileSelect(file) {
+            currentFile = file;
+            selectedFileName.textContent = file.name;
+            selectedFile.classList.add('active');
+            convertFileBtn.disabled = false;
+            hideResult();
+        }
+
+        convertFileBtn.addEventListener('click', async () => {
+            if (!currentFile) return;
+            
+            showLoading();
+            hideResult();
+            
+            const formData = new FormData();
+            formData.append('file', currentFile);
+            
+            try {
+                const response = await fetch('/convert/document', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                hideLoading();
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const filename = getFilenameFromResponse(response);
+                    showSuccess(blob, filename);
+                } else {
+                    const errorData = await response.json();
+                    showError(errorData.error || 'Conversion failed', errorData.details || '');
+                }
+            } catch (error) {
+                hideLoading();
+                showError('Network error', 'Failed to connect to the server. Please try again.');
+            }
+        });
+
+        // Text input handling
+        const textInput = document.getElementById('textInput');
+        const convertTextBtn = document.getElementById('convertTextBtn');
+
+        convertTextBtn.addEventListener('click', async () => {
+            const text = textInput.value.trim();
+            
+            if (!text) {
+                showError('Empty text', 'Please enter some event information.');
+                return;
+            }
+            
+            showLoading();
+            hideResult();
+            
+            try {
+                const response = await fetch('/convert/text', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ text })
+                });
+                
+                hideLoading();
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const filename = getFilenameFromResponse(response);
+                    showSuccess(blob, filename);
+                } else {
+                    const errorData = await response.json();
+                    showError(errorData.error || 'Conversion failed', errorData.details || '');
+                }
+            } catch (error) {
+                hideLoading();
+                showError('Network error', 'Failed to connect to the server. Please try again.');
+            }
+        });
+
+        // UI helper functions
+        function showLoading() {
+            document.getElementById('loading').classList.add('active');
+            convertFileBtn.disabled = true;
+            convertTextBtn.disabled = true;
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').classList.remove('active');
+            if (currentFile) {
+                convertFileBtn.disabled = false;
+            }
+            convertTextBtn.disabled = false;
+        }
+
+        function showSuccess(blob, filename) {
+            const result = document.getElementById('result');
+            const resultIcon = document.getElementById('resultIcon');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultMessage = document.getElementById('resultMessage');
+            const downloadBtn = document.getElementById('downloadBtn');
+            
+            result.className = 'result active success';
+            resultIcon.textContent = '✅';
+            resultTitle.textContent = 'Success!';
+            resultMessage.textContent = 'Your calendar event has been created successfully.';
+            
+            const url = URL.createObjectURL(blob);
+            downloadBtn.href = url;
+            downloadBtn.download = filename;
+            downloadBtn.style.display = 'inline-block';
+        }
+
+        function showError(title, message) {
+            const result = document.getElementById('result');
+            const resultIcon = document.getElementById('resultIcon');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultMessage = document.getElementById('resultMessage');
+            const downloadBtn = document.getElementById('downloadBtn');
+            
+            result.className = 'result active error';
+            resultIcon.textContent = '❌';
+            resultTitle.textContent = title;
+            resultMessage.textContent = message;
+            downloadBtn.style.display = 'none';
+        }
+
+        function hideResult() {
+            document.getElementById('result').classList.remove('active');
+        }
+
+        function getFilenameFromResponse(response) {
+            const disposition = response.headers.get('Content-Disposition');
+            if (disposition) {
+                const filenameMatch = disposition.match(/filename="?(.+)"?/);
+                if (filenameMatch) {
+                    return filenameMatch[1];
+                }
+            }
+            return 'event.ics';
+        }
+    </script>
+</body>
+</html>

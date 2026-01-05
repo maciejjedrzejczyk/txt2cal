@@ -1,0 +1,34 @@
+# Calendar Event Converter Configuration
+
+# LLM Server Configuration
+llm:
+  # API base URL for OpenAI-compatible LLM server
+  # Default: LM Studio running on host machine (accessible from Docker container)
+  api_base: "http://host.docker.internal:1234/v1"
+  
+  # Model name to use for event extraction
+  # Default: IBM Granite 4 H Tiny model
+  model: "ibm/granite-4-h-tiny"
+  
+  # API key for authentication (not needed for LM Studio)
+  api_key: "not-needed"
+  
+  # Request timeout in seconds
+  timeout: 30
+
+# Server Configuration
+server:
+  # Host to bind the server to
+  # Use 0.0.0.0 to accept connections from any network interface
+  host: "0.0.0.0"
+  
+  # Port to listen on
+  port: 8000
+
+# Resource Limits
+limits:
+  # Maximum file size for document uploads (in megabytes)
+  max_file_size_mb: 10
+  
+  # Maximum text length for text conversion (in characters)
+  max_text_length: 50000

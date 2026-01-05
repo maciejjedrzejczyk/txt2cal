@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  calendar-converter:
+    build: .
+    container_name: calendar-event-converter
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./config/config.yaml:/app/config/config.yaml:ro
+    network_mode: bridge
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
